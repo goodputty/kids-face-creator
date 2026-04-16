@@ -70,7 +70,7 @@ const state = {
   clothes:   CLOTHES_OPTIONS[0].id,
   accessory: "none",
   name:      "",
-  nameColor: BRAND_COLORS[0],
+  nameColor: BRAND_COLORS[4], // starts on a different colour from background
 };
 
 // ═══════════════════════════════════════════════════════════════════════════

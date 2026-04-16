@@ -69,7 +69,7 @@
 
     /* ── Left: preview ── */
     #preview-col {
-      width: 38%; flex-shrink: 0;
+      width: 42%; flex-shrink: 0;
       padding: 20px 14px 20px 20px;
       display: flex; align-items: center; justify-content: center;
     }
@@ -137,12 +137,13 @@
     /* Thumbnail grid */
     .thumb-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
-      gap: 6px;
+      grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+      gap: 5px;
     }
     .thumb-btn {
-      aspect-ratio: 1/1;
-      border-radius: 10px;
+      width: 100%;
+      aspect-ratio: 1 / 1 !important;
+      border-radius: 8px;
       border: 2px solid #f0dde8;
       background: #fdf0f6;
       cursor: pointer; overflow: hidden; padding: 0;
