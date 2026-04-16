@@ -31,7 +31,7 @@ const HAIR_COLORS = [
 // color must match an id from HAIR_COLORS so the grid filters correctly
 // e.g. { id: "black-pigtails", color: "black", src: "images/hair-black-pigtails.png", label: "Staartjes" }
 const HAIR_OPTIONS = [
-  { id: "black-pigtails",  color: "black",  src: images/hair-black-pigtails.png, label: "Staartjes" },
+  { id: "black-pigtails",  color: "black",  src: "images/hair-black-pigtails.png", label: "Staartjes" },
   { id: "h2",  color: "black",  src: null, label: "Stijl 2" },
   { id: "h3",  color: "black",  src: null, label: "Stijl 3" },
   { id: "h4",  color: "black",  src: null, label: "Stijl 4" },
