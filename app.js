@@ -13,14 +13,12 @@ const BRAND_COLORS = [
   "#FFFFFF",
 ];
 
-// ★ Skin tones
-const SKIN_TONES = [
-  "#FDDBB4",
-  "#F5C48A",
-  "#E8A96A",
-  "#C47B3A",
-  "#8B5A2B",
-  "#4A2C0A",
+// ★ Face options — one PNG per skin tone
+// Each swatch colour is just for the UI button, the PNG is what shows in the preview
+const FACE_OPTIONS = [
+  { id: "fair",     src: "images/face-fair.png",     color: "#FDDBB4", label: "Fair"     },
+  { id: "honey",    src: "images/face-honey.png",    color: "#C47B3A", label: "Honey"    },
+  { id: "chestnut", src: "images/face-chestnut.png", color: "#4A2C0A", label: "Chestnut" },
 ];
 
 // ★ Hair options — replace src with your PNG filenames once ready
@@ -65,23 +63,19 @@ const PRINT_H = 1772;
 // ═══════════════════════════════════════════════════════════════════════════
 const state = {
   bgColor:   BRAND_COLORS[0],
-  skinTone:  SKIN_TONES[1],
+  face:      FACE_OPTIONS[0].id,
   hair:      HAIR_OPTIONS[0].id,
   clothes:   CLOTHES_OPTIONS[0].id,
   accessory: "none",
   name:      "",
-  nameColor: BRAND_COLORS[4], // starts on a different colour from background
+  nameColor: BRAND_COLORS[4],
 };
 
 // ═══════════════════════════════════════════════════════════════════════════
 // DOM REFS
 // ═══════════════════════════════════════════════════════════════════════════
 const portraitWrap = document.getElementById("portrait-wrap");
-const svgFace      = document.getElementById("svg-face");
-const svgFaceFill  = document.getElementById("svg-face-fill");
-const svgEarL      = document.getElementById("svg-ear-l");
-const svgEarR      = document.getElementById("svg-ear-r");
-const svgNeck      = document.getElementById("svg-neck");
+const layerFace    = document.getElementById("layer-face");
 const layerClothes = document.getElementById("layer-clothes");
 const layerHair    = document.getElementById("layer-hair");
 const layerAcc     = document.getElementById("layer-acc");
@@ -96,13 +90,14 @@ function render() {
   // Background colour
   portraitWrap.style.background = state.bgColor;
 
-  // Skin tone — always update SVG face
-  svgFaceFill.setAttribute("fill", state.skinTone);
-  svgEarL.setAttribute("fill", state.skinTone);
-  svgEarR.setAttribute("fill", state.skinTone);
-  svgNeck.setAttribute("fill", state.skinTone);
+  // Face PNG
+  const face = FACE_OPTIONS.find(f => f.id === state.face);
+  if (face?.src) {
+    layerFace.src = face.src;
+    layerFace.style.display = "block";
+  }
 
-  // Clothes layer
+  // Clothes layer — sits behind face
   const clothes = CLOTHES_OPTIONS.find(c => c.id === state.clothes);
   if (clothes?.src) {
     layerClothes.src = clothes.src;
@@ -111,18 +106,16 @@ function render() {
     layerClothes.style.display = "none";
   }
 
-  // Hair layer
+  // Hair layer — sits in front of face
   const hair = HAIR_OPTIONS.find(h => h.id === state.hair);
   if (hair?.src) {
     layerHair.src = hair.src;
     layerHair.style.display = "block";
-    svgFace.style.display = "none"; // real PNG replaces SVG
   } else {
     layerHair.style.display = "none";
-    svgFace.style.display = "block"; // show SVG default face
   }
 
-  // Accessory layer
+  // Accessory layer — on top of everything
   const acc = ACCESSORY_OPTIONS.find(a => a.id === state.accessory);
   if (state.accessory !== "none" && acc?.src) {
     layerAcc.src = acc.src;
@@ -131,7 +124,7 @@ function render() {
     layerAcc.style.display = "none";
   }
 
-  // Name overlay — always update text and colour
+  // Name overlay
   layerName.textContent = state.name ? state.name.toUpperCase() : "";
   layerName.style.color = state.nameColor;
 }
@@ -139,23 +132,27 @@ function render() {
 // ═══════════════════════════════════════════════════════════════════════════
 // BUILD SWATCHES
 // ═══════════════════════════════════════════════════════════════════════════
-function buildSwatches(containerId, colors, getSelected, onSelect) {
+function buildSwatches(containerId, items, getSelected, onSelect) {
   const container = document.getElementById(containerId);
   container.innerHTML = "";
 
-  colors.forEach(color => {
+  items.forEach(item => {
+    // item can be a plain hex string or { id, color }
+    const color = item.color || item;
+    const value = item.id   || item;
+
     const btn = document.createElement("button");
     btn.className = "swatch";
     btn.style.background = color;
+    btn.dataset.value = value;
     btn.dataset.color = color;
-    updateSwatchStyle(btn, color, getSelected());
+    updateSwatchStyle(btn, value, getSelected());
 
     btn.addEventListener("click", () => {
-      onSelect(color);
+      onSelect(value);
       render();
-      // Refresh all swatch styles in this group
       container.querySelectorAll(".swatch").forEach(b => {
-        updateSwatchStyle(b, b.dataset.color, getSelected());
+        updateSwatchStyle(b, b.dataset.value, getSelected());
       });
     });
 
@@ -163,8 +160,9 @@ function buildSwatches(containerId, colors, getSelected, onSelect) {
   });
 }
 
-function updateSwatchStyle(btn, color, selected) {
-  const isSelected = color === selected;
+function updateSwatchStyle(btn, value, selected) {
+  const isSelected = value === selected;
+  const color = btn.dataset.color;
   btn.classList.toggle("selected", isSelected);
   if (isSelected) {
     btn.style.boxShadow = "0 0 0 2px white, 0 0 0 6px #FF8FAB";
@@ -271,11 +269,13 @@ async function exportPortrait() {
       img.src = src;
     });
 
+    const face    = FACE_OPTIONS.find(f => f.id === state.face);
     const clothes = CLOTHES_OPTIONS.find(c => c.id === state.clothes);
     const hair    = HAIR_OPTIONS.find(h => h.id === state.hair);
     const acc     = ACCESSORY_OPTIONS.find(a => a.id === state.accessory);
 
     await drawImage(clothes?.src);
+    await drawImage(face?.src);
     await drawImage(hair?.src);
     if (state.accessory !== "none") await drawImage(acc?.src);
 
@@ -376,7 +376,8 @@ if ("serviceWorker" in navigator) {
 // INIT
 // ═══════════════════════════════════════════════════════════════════════════
 function init() {
-  buildSwatches("skin-swatches",  SKIN_TONES,    () => state.skinTone,  v => { state.skinTone  = v; });
+  buildSwatches("skin-swatches",  FACE_OPTIONS.map(f => ({ color: f.color, id: f.id })),
+    () => state.face, v => { state.face = v; });
   buildSwatches("bg-swatches",    BRAND_COLORS,  () => state.bgColor,   v => { state.bgColor   = v; });
   buildSwatches("name-swatches",  BRAND_COLORS,  () => state.nameColor, v => { state.nameColor = v; });
   buildThumbGrid("hair-grid",     HAIR_OPTIONS,      () => state.hair,      v => { state.hair      = v; });

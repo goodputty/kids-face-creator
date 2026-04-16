@@ -203,44 +203,11 @@
   <div id="preview-col">
     <div id="portrait-wrap">
 
-      <!-- SVG default face — hidden once real PNGs load -->
-      <svg id="svg-face" viewBox="0 0 400 600" xmlns="http://www.w3.org/2000/svg">
-        <!-- Body / clothes -->
-        <ellipse cx="200" cy="570" rx="115" ry="75" fill="#4CAF82" />
-        <rect x="88" y="495" width="224" height="82" rx="42" fill="#4CAF82" />
-        <!-- Neck -->
-        <rect id="svg-neck" x="172" y="405" width="56" height="58" rx="18" fill="#F5C48A" />
-        <!-- Hair back -->
-        <ellipse cx="200" cy="198" rx="132" ry="150" fill="#1a1a1a" />
-        <ellipse cx="66" cy="338" rx="36" ry="58" fill="#1a1a1a" />
-        <ellipse cx="334" cy="338" rx="36" ry="58" fill="#1a1a1a" />
-        <!-- Face -->
-        <ellipse id="svg-face-fill" cx="200" cy="242" rx="116" ry="128" fill="#F5C48A" />
-        <!-- Ears -->
-        <ellipse id="svg-ear-l" cx="84" cy="242" rx="17" ry="21" fill="#F5C48A" />
-        <ellipse id="svg-ear-r" cx="316" cy="242" rx="17" ry="21" fill="#F5C48A" />
-        <!-- Hair front -->
-        <ellipse cx="200" cy="138" rx="116" ry="58" fill="#1a1a1a" />
-        <ellipse cx="132" cy="160" rx="40" ry="30" fill="#1a1a1a" />
-        <ellipse cx="268" cy="160" rx="40" ry="30" fill="#1a1a1a" />
-        <!-- Blush -->
-        <ellipse cx="142" cy="278" rx="27" ry="17" fill="rgba(235,130,118,0.28)" />
-        <ellipse cx="258" cy="278" rx="27" ry="17" fill="rgba(235,130,118,0.28)" />
-        <!-- Eyes -->
-        <circle cx="162" cy="228" r="13" fill="#1a1a1a" />
-        <circle cx="238" cy="228" r="13" fill="#1a1a1a" />
-        <circle cx="167" cy="222" r="4.5" fill="white" />
-        <circle cx="243" cy="222" r="4.5" fill="white" />
-        <!-- Nose -->
-        <line x1="200" y1="254" x2="200" y2="272" stroke="#b07050" stroke-width="3" stroke-linecap="round" />
-        <!-- Smile -->
-        <path d="M176 302 Q200 326 224 302" fill="none" stroke="#1a1a1a" stroke-width="4" stroke-linecap="round" />
-      </svg>
-
-      <!-- Real PNG layers (hidden until src is set) -->
-      <img id="layer-clothes" style="display:none" alt="clothes" />
-      <img id="layer-hair"    style="display:none" alt="hair" />
-      <img id="layer-acc"     style="display:none" alt="accessory" />
+      <!-- Layer order: clothes → face → hair → accessory → name -->
+      <img id="layer-clothes" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="clothes" />
+      <img id="layer-face"    style="display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="face" src="images/face-fair.png" />
+      <img id="layer-hair"    style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="hair" />
+      <img id="layer-acc"     style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="accessory" />
 
       <!-- Name overlay -->
       <div id="layer-name"></div>
