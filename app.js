@@ -21,17 +21,28 @@ const FACE_OPTIONS = [
   { id: "chestnut", src: "images/face-chestnut.png", color: "#4A2C0A", label: "Chestnut" },
 ];
 
-// ★ Hair options — replace src with your PNG filenames once ready
-// e.g. src: "images/hair-black-pigtails.png"
+// ★ Hair colour options
+const HAIR_COLORS = [
+  { id: "black",  color: "#000000", label: "Zwart"  },
+  { id: "brown",  color: "#8F5A28", label: "Bruin"  },
+  { id: "blonde", color: "#F5D532", label: "Blond"  },
+];
+// ★ Hair options — one entry per hairstyle+colour combo
+// color must match an id from HAIR_COLORS so the grid filters correctly
+// e.g. { id: "black-pigtails", color: "black", src: "images/hair-black-pigtails.png", label: "Staartjes" }
 const HAIR_OPTIONS = [
-  { id: "h1", src: null, label: "Hair 1" },
-  { id: "h2", src: null, label: "Hair 2" },
-  { id: "h3", src: null, label: "Hair 3" },
-  { id: "h4", src: null, label: "Hair 4" },
-  { id: "h5", src: null, label: "Hair 5" },
-  { id: "h6", src: null, label: "Hair 6" },
-  { id: "h7", src: null, label: "Hair 7" },
-  { id: "h8", src: null, label: "Hair 8" },
+  { id: "h1",  color: "black",  src: null, label: "Stijl 1" },
+  { id: "h2",  color: "black",  src: null, label: "Stijl 2" },
+  { id: "h3",  color: "black",  src: null, label: "Stijl 3" },
+  { id: "h4",  color: "black",  src: null, label: "Stijl 4" },
+  { id: "h5",  color: "brown",  src: null, label: "Stijl 1" },
+  { id: "h6",  color: "brown",  src: null, label: "Stijl 2" },
+  { id: "h7",  color: "brown",  src: null, label: "Stijl 3" },
+  { id: "h8",  color: "brown",  src: null, label: "Stijl 4" },
+  { id: "h9",  color: "blonde", src: null, label: "Stijl 1" },
+  { id: "h10", color: "blonde", src: null, label: "Stijl 2" },
+  { id: "h11", color: "blonde", src: null, label: "Stijl 3" },
+  { id: "h12", color: "blonde", src: null, label: "Stijl 4" },
 ];
 
 // ★ Clothes options
@@ -64,10 +75,11 @@ const PRINT_H = 1772;
 const state = {
   bgColor:   BRAND_COLORS[0],
   face:      FACE_OPTIONS[0].id,
+  hairColor: HAIR_COLORS[0].id,
   hair:      HAIR_OPTIONS[0].id,
   clothes:   CLOTHES_OPTIONS[0].id,
   accessory: "none",
-  name:      "",
+  name:      "Naam",
   nameColor: BRAND_COLORS[4],
 };
 
@@ -378,15 +390,52 @@ if ("serviceWorker" in navigator) {
 // ═══════════════════════════════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════════════════════════════
+// Builds hair grid filtered to currently selected hair colour
+function buildFilteredHairGrid() {
+  const filtered = HAIR_OPTIONS.filter(h => h.color === state.hairColor);
+  buildThumbGrid("hair-grid", filtered, () => state.hair, v => { state.hair = v; });
+  render();
+}
+
 function init() {
-  buildSwatches("skin-swatches",  FACE_OPTIONS.map(f => ({ color: f.color, id: f.id })),
-    () => state.face, v => { state.face = v; });
-  buildSwatches("bg-swatches",    BRAND_COLORS,  () => state.bgColor,   v => { state.bgColor   = v; });
-  buildSwatches("name-swatches",  BRAND_COLORS,  () => state.nameColor, v => { state.nameColor = v; });
-  buildThumbGrid("hair-grid",     HAIR_OPTIONS,      () => state.hair,      v => { state.hair      = v; });
+  buildSwatches("skin-swatches",       FACE_OPTIONS.map(f => ({ color: f.color, id: f.id })),
+    () => state.face,      v => { state.face      = v; });
+  buildSwatches("hair-color-swatches", HAIR_COLORS.map(h => ({ color: h.color, id: h.id })),
+    () => state.hairColor, v => {
+      state.hairColor = v;
+      // Auto-select first hair of new colour
+      const first = HAIR_OPTIONS.find(h => h.color === v);
+      if (first) state.hair = first.id;
+      // Rebuild the hair grid filtered to new colour
+      buildFilteredHairGrid();
+    });
+  buildSwatches("bg-swatches",         BRAND_COLORS,
+    () => state.bgColor,   v => { state.bgColor   = v; });
+  buildSwatches("name-swatches",       BRAND_COLORS,
+    () => state.nameColor, v => { state.nameColor = v; });
+  buildFilteredHairGrid();
   buildThumbGrid("clothes-grid",  CLOTHES_OPTIONS,   () => state.clothes,   v => { state.clothes   = v; });
   buildThumbGrid("acc-grid",      ACCESSORY_OPTIONS, () => state.accessory, v => { state.accessory = v; });
 
+  // Set default name value
+  nameInput.value = state.name;
+
+  nameInput.addEventListener("focus", () => {
+    // Clear "Naam" placeholder when kid taps the field
+    if (nameInput.value === "Naam") {
+      nameInput.value = "";
+      state.name = "";
+      render();
+    }
+  });
+  nameInput.addEventListener("blur", () => {
+    // Restore "Naam" if left empty
+    if (!nameInput.value.trim()) {
+      nameInput.value = "Naam";
+      state.name = "Naam";
+      render();
+    }
+  });
   nameInput.addEventListener("input", () => {
     state.name = nameInput.value;
     render();
