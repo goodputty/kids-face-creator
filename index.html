@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Portrait Builder" />
+  <title>Portrait Builder – Portraits by Jun-Yi</title>
+
+  <!-- PWA manifest -->
+  <link rel="manifest" href="manifest.json" />
+
+  <!-- ★ Replace this with the actual path to your Inter Mush font file -->
+  <!-- Upload inter-mush.woff2 to the same folder as this index.html   -->
+  <style>
+    @font-face {
+      font-family: 'InterMush';
+      src: url('inter-mush.woff2') format('woff2');
+      font-weight: 900;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'InterMush', 'Nunito', system-ui, sans-serif;
+      background: #FFF5F8;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ── */
+    #header {
+      background: linear-gradient(135deg, #FF8FAB, #FFB347);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      box-shadow: 0 4px 16px rgba(255,143,171,0.3);
+    }
+    #header .brand-sub {
+      font-size: 9px; font-weight: 800;
+      color: rgba(255,255,255,0.75);
+      letter-spacing: 3px; text-transform: uppercase;
+    }
+    #header .brand-title {
+      font-size: 20px; font-weight: 900; color: white;
+    }
+    #save-btn {
+      background: white; color: #FF8FAB;
+      font-family: inherit; font-weight: 900; font-size: 14px;
+      padding: 11px 22px; border-radius: 40px; border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      display: flex; align-items: center; gap: 8px;
+      transition: opacity 0.2s;
+    }
+    #save-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ── Body ── */
+    #body {
+      flex: 1; display: flex; overflow: hidden; min-height: 0;
+    }
+
+    /* ── Left: preview ── */
+    #preview-col {
+      width: 38%; flex-shrink: 0;
+      padding: 20px 14px 20px 20px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #portrait-wrap {
+      width: 100%; max-width: 310px;
+      position: relative;
+      padding-bottom: 150%; /* 2:3 */
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+      transition: background 0.25s;
+    }
+    #portrait-wrap > * {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+    }
+    #layer-face   { object-fit: contain; }
+    #layer-clothes{ object-fit: contain; }
+    #layer-hair   { object-fit: contain; }
+    #layer-acc    { object-fit: contain; display: none; }
+    #layer-name {
+      display: flex; align-items: flex-end; justify-content: center;
+      padding-bottom: 5%;
+      font-family: 'InterMush', system-ui;
+      font-weight: 900; font-size: clamp(18px, 4.5vw, 40px);
+      letter-spacing: 3px; text-transform: uppercase;
+      pointer-events: none;
+      text-align: center;
+      background: transparent !important;
+    }
+
+    /* ── Right: options ── */
+    #options-col {
+      flex: 1; overflow-y: auto;
+      padding: 20px 20px 40px 14px;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+    #options-col::-webkit-scrollbar { width: 4px; }
+    #options-col::-webkit-scrollbar-thumb { background: #f0c0d0; border-radius: 4px; }
+
+    .section-label {
+      font-size: 11px; font-weight: 900; color: #FF8FAB;
+      text-transform: uppercase; letter-spacing: 2.5px;
+      display: flex; align-items: center; gap: 7px;
+      margin-bottom: 10px;
+    }
+    .section-divider {
+      height: 1px; background: #f5eaef; margin-top: 6px;
+    }
+
+    /* Colour swatches */
+    .swatch-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .swatch {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: none; cursor: pointer; flex-shrink: 0;
+      outline: 3px solid transparent; outline-offset: 3px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      transition: all 0.15s;
+    }
+    .swatch.selected {
+      outline-color: #FF8FAB;
+      box-shadow: 0 0 0 2px white, 0 0 0 6px #FF8FAB;
+    }
+
+    /* Thumbnail grid */
+    .thumb-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(74px, 1fr));
+      gap: 10px;
+    }
+    .thumb-btn {
+      aspect-ratio: 2/3;
+      border-radius: 14px;
+      border: 2px solid #f0dde8;
+      background: #fdf0f6;
+      cursor: pointer; overflow: hidden; padding: 0;
+      position: relative;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      transition: all 0.15s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .thumb-btn.none-btn { aspect-ratio: 1/1; background: #faf5f8; }
+    .thumb-btn.selected {
+      border: 3px solid #FF8FAB;
+      box-shadow: 0 0 0 2px white, 0 0 0 5px #FF8FAB;
+    }
+    .thumb-btn img { width: 100%; height: 100%; object-fit: cover; }
+    .thumb-btn .thumb-label {
+      font-size: 9px; color: #dbb0c8; font-weight: 700;
+      text-align: center; padding: 6px; line-height: 1.5;
+    }
+    .thumb-tick {
+      display: none; position: absolute; top: 5px; right: 5px;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: #FF8FAB; color: white;
+      font-size: 10px; font-weight: 900;
+      align-items: center; justify-content: center;
+    }
+    .thumb-btn.selected .thumb-tick { display: flex; }
+
+    /* Name input */
+    #name-input {
+      width: 100%; padding: 14px 18px;
+      border-radius: 16px; border: 2px solid #f0dde8;
+      font-size: 22px; font-weight: 900;
+      font-family: 'InterMush', system-ui;
+      background: #fff; outline: none;
+      letter-spacing: 3px; text-transform: uppercase;
+      caret-color: #FF8FAB;
+      transition: border 0.15s;
+    }
+    #name-input:focus { border-color: #FF8FAB; }
+  </style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<div id="header">
+  <div>
+    <div class="brand-sub">Portraits by Jun-Yi</div>
+    <div class="brand-title">Make your own portrait! 🎨</div>
+  </div>
+  <button id="save-btn">⬆️ Save &amp; AirDrop</button>
+</div>
+
+<!-- ── Body ── -->
+<div id="body">
+
+  <!-- Left: portrait preview -->
+  <div id="preview-col">
+    <div id="portrait-wrap">
+
+      <!-- SVG default face — hidden once real PNGs load -->
+      <svg id="svg-face" viewBox="0 0 400 600" xmlns="http://www.w3.org/2000/svg">
+        <!-- Body / clothes -->
+        <ellipse cx="200" cy="570" rx="115" ry="75" fill="#4CAF82" />
+        <rect x="88" y="495" width="224" height="82" rx="42" fill="#4CAF82" />
+        <!-- Neck -->
+        <rect id="svg-neck" x="172" y="405" width="56" height="58" rx="18" fill="#F5C48A" />
+        <!-- Hair back -->
+        <ellipse cx="200" cy="198" rx="132" ry="150" fill="#1a1a1a" />
+        <ellipse cx="66" cy="338" rx="36" ry="58" fill="#1a1a1a" />
+        <ellipse cx="334" cy="338" rx="36" ry="58" fill="#1a1a1a" />
+        <!-- Face -->
+        <ellipse id="svg-face-fill" cx="200" cy="242" rx="116" ry="128" fill="#F5C48A" />
+        <!-- Ears -->
+        <ellipse id="svg-ear-l" cx="84" cy="242" rx="17" ry="21" fill="#F5C48A" />
+        <ellipse id="svg-ear-r" cx="316" cy="242" rx="17" ry="21" fill="#F5C48A" />
+        <!-- Hair front -->
+        <ellipse cx="200" cy="138" rx="116" ry="58" fill="#1a1a1a" />
+        <ellipse cx="132" cy="160" rx="40" ry="30" fill="#1a1a1a" />
+        <ellipse cx="268" cy="160" rx="40" ry="30" fill="#1a1a1a" />
+        <!-- Blush -->
+        <ellipse cx="142" cy="278" rx="27" ry="17" fill="rgba(235,130,118,0.28)" />
+        <ellipse cx="258" cy="278" rx="27" ry="17" fill="rgba(235,130,118,0.28)" />
+        <!-- Eyes -->
+        <circle cx="162" cy="228" r="13" fill="#1a1a1a" />
+        <circle cx="238" cy="228" r="13" fill="#1a1a1a" />
+        <circle cx="167" cy="222" r="4.5" fill="white" />
+        <circle cx="243" cy="222" r="4.5" fill="white" />
+        <!-- Nose -->
+        <line x1="200" y1="254" x2="200" y2="272" stroke="#b07050" stroke-width="3" stroke-linecap="round" />
+        <!-- Smile -->
+        <path d="M176 302 Q200 326 224 302" fill="none" stroke="#1a1a1a" stroke-width="4" stroke-linecap="round" />
+      </svg>
+
+      <!-- Real PNG layers (hidden until src is set) -->
+      <img id="layer-clothes" style="display:none" alt="clothes" />
+      <img id="layer-hair"    style="display:none" alt="hair" />
+      <img id="layer-acc"     style="display:none" alt="accessory" />
+
+      <!-- Name overlay -->
+      <div id="layer-name"></div>
+    </div>
+  </div>
+
+  <!-- Right: scrollable options -->
+  <div id="options-col">
+
+    <!-- 1. Face colour -->
+    <div>
+      <div class="section-label"><span>🎨</span> Face colour</div>
+      <div class="swatch-row" id="skin-swatches"></div>
+      <div class="section-divider"></div>
+    </div>
+
+    <!-- 2. Hair -->
+    <div>
+      <div class="section-label"><span>💇</span> Hair</div>
+      <div class="thumb-grid" id="hair-grid"></div>
+      <div class="section-divider"></div>
+    </div>
+
+    <!-- 3. Clothes -->
+    <div>
+      <div class="section-label"><span>👕</span> Clothes</div>
+      <div class="thumb-grid" id="clothes-grid"></div>
+      <div class="section-divider"></div>
+    </div>
+
+    <!-- 4. Accessory -->
+    <div>
+      <div class="section-label"><span>✨</span> Accessory</div>
+      <div class="thumb-grid" id="acc-grid"></div>
+      <div class="section-divider"></div>
+    </div>
+
+    <!-- 5. Name -->
+    <div>
+      <div class="section-label"><span>✏️</span> Your name</div>
+      <input id="name-input" type="text" maxlength="16" placeholder="Type your name…" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" />
+      <div class="section-divider"></div>
+    </div>
+
+    <!-- 6. Background colour -->
+    <div>
+      <div class="section-label"><span>🌈</span> Background colour</div>
+      <div class="swatch-row" id="bg-swatches"></div>
+      <div class="section-divider"></div>
+    </div>
+
+    <!-- 7. Name colour -->
+    <div>
+      <div class="section-label"><span>🖊️</span> Name colour</div>
+      <div class="swatch-row" id="name-swatches"></div>
+      <div class="section-divider"></div>
+    </div>
+
+    <div style="height:20px"></div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
