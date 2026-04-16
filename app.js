@@ -4,12 +4,12 @@
 
 // ★ Your 7 brand colours (same set used for background and name colour)
 const BRAND_COLORS = [
-  "#F9C5D1",
-  "#FDDBB4",
-  "#FFF3B0",
-  "#C7EFC6",
-  "#B8E0FF",
-  "#D4B8FF",
+  "#f6d1cb",
+  "#f0ce5b",
+  "#3351c6",
+  "#c2221b",
+  "#1c7b1c",
+  "#d77326",
   "#FFFFFF",
 ];
 
