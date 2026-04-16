@@ -26,7 +26,7 @@
 
     body {
       font-family: 'InterMush', 'Nunito', system-ui, sans-serif;
-      background: #FFF5F8;
+      background: #F5F0E8;
       height: 100vh;
       overflow: hidden;
       display: flex;
@@ -35,13 +35,13 @@
 
     /* ── Header ── */
     #header {
-      background: linear-gradient(135deg, #FF8FAB, #FFB347);
+      background: linear-gradient(135deg, #C8B99A, #A89070);
       padding: 12px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-shrink: 0;
-      box-shadow: 0 4px 16px rgba(255,143,171,0.3);
+      box-shadow: 0 4px 16px rgba(120,90,60,0.2);
     }
     #header .brand-sub {
       font-size: 9px; font-weight: 800;
@@ -52,7 +52,7 @@
       font-size: 20px; font-weight: 900; color: white;
     }
     #save-btn {
-      background: white; color: #FF8FAB;
+      background: white; color: #8B6F47;
       font-family: inherit; font-weight: 900; font-size: 14px;
       padding: 11px 22px; border-radius: 40px; border: none;
       cursor: pointer;
@@ -70,16 +70,22 @@
     /* ── Left: preview ── */
     #preview-col {
       width: 42%; flex-shrink: 0;
-      padding: 20px 14px 20px 20px;
+      padding: 16px 14px 16px 20px;
       display: flex; align-items: center; justify-content: center;
     }
-    #portrait-wrap {
-      width: 100%; max-width: 310px;
+    #portrait-outer {
+      width: 100%;
+      max-width: 260px;
+      /* Cap height so portrait never overflows the body area */
+      max-height: calc(100vh - 70px);
+      aspect-ratio: 2 / 3;
       position: relative;
-      padding-bottom: 150%; /* 2:3 */
-      border-radius: 24px;
+    }
+    #portrait-wrap {
+      position: absolute; inset: 0;
+      border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.15);
       transition: background 0.25s;
     }
     #portrait-wrap > * {
@@ -108,16 +114,16 @@
       display: flex; flex-direction: column; gap: 20px;
     }
     #options-col::-webkit-scrollbar { width: 4px; }
-    #options-col::-webkit-scrollbar-thumb { background: #f0c0d0; border-radius: 4px; }
+    #options-col::-webkit-scrollbar-thumb { background: #C8B99A; border-radius: 4px; }
 
     .section-label {
-      font-size: 11px; font-weight: 900; color: #FF8FAB;
+      font-size: 11px; font-weight: 900; color: #8B6F47;
       text-transform: uppercase; letter-spacing: 2.5px;
       display: flex; align-items: center; gap: 7px;
       margin-bottom: 10px;
     }
     .section-divider {
-      height: 1px; background: #f5eaef; margin-top: 6px;
+      height: 1px; background: #E8E0D0; margin-top: 6px;
     }
 
     /* Colour swatches */
@@ -154,8 +160,8 @@
     }
     .thumb-btn.none-btn { background: #faf5f8; }
     .thumb-btn.selected {
-      border: 3px solid #FF8FAB;
-      box-shadow: 0 0 0 2px white, 0 0 0 5px #FF8FAB;
+      border: 3px solid #8B6F47;
+      box-shadow: 0 0 0 2px white, 0 0 0 5px #8B6F47;
     }
     .thumb-btn img { width: 100%; height: 100%; object-fit: cover; }
     .thumb-btn .thumb-label {
@@ -174,15 +180,15 @@
     /* Name input */
     #name-input {
       width: 100%; padding: 14px 18px;
-      border-radius: 16px; border: 2px solid #f0dde8;
+      border-radius: 16px; border: 2px solid #E0D5C0;
       font-size: 22px; font-weight: 900;
       font-family: 'InterMush', system-ui;
       background: #fff; outline: none;
       letter-spacing: 3px; text-transform: uppercase;
-      caret-color: #FF8FAB;
+      caret-color: #8B6F47;
       transition: border 0.15s;
     }
-    #name-input:focus { border-color: #FF8FAB; }
+    #name-input:focus { border-color: #8B6F47; }
   </style>
 </head>
 <body>
@@ -201,7 +207,8 @@
 
   <!-- Left: portrait preview -->
   <div id="preview-col">
-    <div id="portrait-wrap">
+    <div id="portrait-outer">
+      <div id="portrait-wrap">
 
       <!-- Layer order: clothes → face → hair → accessory → name -->
       <img id="layer-clothes" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="clothes" />
@@ -211,7 +218,8 @@
 
       <!-- Name overlay -->
       <div id="layer-name"></div>
-    </div>
+    </div><!-- end portrait-wrap -->
+    </div><!-- end portrait-outer -->
   </div>
 
   <!-- Right: scrollable options -->

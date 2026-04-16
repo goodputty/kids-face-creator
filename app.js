@@ -165,7 +165,7 @@ function updateSwatchStyle(btn, value, selected) {
   const color = btn.dataset.color;
   btn.classList.toggle("selected", isSelected);
   if (isSelected) {
-    btn.style.boxShadow = "0 0 0 2px white, 0 0 0 6px #FF8FAB";
+    btn.style.boxShadow = "0 0 0 2px white, 0 0 0 6px #8B6F47";
   } else if (color === "#FFFFFF") {
     btn.style.boxShadow = "inset 0 0 0 1.5px #ddd";
   } else {
@@ -208,10 +208,11 @@ function buildThumbGrid(containerId, options, getSelected, onSelect) {
       btn.appendChild(makePlaceholderLabel(opt.label));
     }
 
-    // Tick mark (always present, shown via CSS when selected)
+    // Tick mark
     const tick = document.createElement("div");
     tick.className = "thumb-tick";
     tick.textContent = "✓";
+    tick.style.cssText = "position:absolute;top:5px;right:5px;width:18px;height:18px;border-radius:50%;background:#8B6F47;color:white;font-size:10px;font-weight:900;align-items:center;justify-content:center;display:none;";
     btn.appendChild(tick);
 
     btn.addEventListener("click", () => {
@@ -236,11 +237,13 @@ function makePlaceholderLabel(label) {
 function updateThumbStyle(btn, id, selected) {
   const isSelected = id === selected;
   btn.classList.toggle("selected", isSelected);
-  btn.style.borderColor = isSelected ? "#FF8FAB" : "#f0dde8";
+  btn.style.borderColor = isSelected ? "#8B6F47" : "#E0D5C0";
   btn.style.borderWidth  = isSelected ? "3px" : "2px";
   btn.style.boxShadow    = isSelected
-    ? "0 0 0 2px white, 0 0 0 5px #FF8FAB"
+    ? "0 0 0 2px white, 0 0 0 5px #8B6F47"
     : "0 2px 8px rgba(0,0,0,0.07)";
+  const tick = btn.querySelector(".thumb-tick");
+  if (tick) tick.style.display = isSelected ? "flex" : "none";
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
