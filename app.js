@@ -31,20 +31,24 @@ const HAIR_COLORS = [
 // color must match an id from HAIR_COLORS so the grid filters correctly
 // e.g. { id: "black-pigtails", color: "black", src: "images/hair-black-pigtails.png", label: "Staartjes" }
 const HAIR_OPTIONS = [
-  { id: "h1", color: "black", src: "images/hair-black-1.png", label: "Stijl 1" },
-  { id: "h2", color: "black", src: "images/hair-black-2.png", label: "Stijl 2" },
-  { id: "h3", color: "black",  src: "images/hair-black-3.png", label: "Stijl 3" },
-  { id: "h4", color: "black",  src: "images/hair-black-4.png", label: "Stijl 4" },
-  { id: "h5", color: "black",  src: "images/hair-black-5.png", label: "Stijl 5" },
-  { id: "h6", color: "black",  src: "images/hair-black-6.png", label: "Stijl 6" },
-  { id: "h5",  color: "brown",  src: null, label: "Stijl 1" },
-  { id: "h6",  color: "brown",  src: null, label: "Stijl 2" },
-  { id: "h7",  color: "brown",  src: null, label: "Stijl 3" },
-  { id: "h8",  color: "brown",  src: null, label: "Stijl 4" },
-  { id: "h9",  color: "blonde", src: null, label: "Stijl 1" },
-  { id: "h10", color: "blonde", src: null, label: "Stijl 2" },
-  { id: "h11", color: "blonde", src: null, label: "Stijl 3" },
-  { id: "h12", color: "blonde", src: null, label: "Stijl 4" },
+  { id: "h1",  color: "black",  src: "images/hair-black-1.png", label: "Stijl 1" },
+  { id: "h2",  color: "black",  src: "images/hair-black-2.png", label: "Stijl 2" },
+  { id: "h3",  color: "black",  src: "images/hair-black-3.png", label: "Stijl 3" },
+  { id: "h4",  color: "black",  src: "images/hair-black-4.png", label: "Stijl 4" },
+  { id: "h5",  color: "black",  src: "images/hair-black-5.png", label: "Stijl 5" },
+  { id: "h6",  color: "black",  src: "images/hair-black-6.png", label: "Stijl 6" },
+  { id: "h7",  color: "brown",  src: null, label: "Stijl 1" },
+  { id: "h8",  color: "brown",  src: null, label: "Stijl 2" },
+  { id: "h9",  color: "brown",  src: null, label: "Stijl 3" },
+  { id: "h10", color: "brown",  src: null, label: "Stijl 4" },
+  { id: "h11", color: "brown",  src: null, label: "Stijl 5" },
+  { id: "h12", color: "brown",  src: null, label: "Stijl 6" },
+  { id: "h13", color: "blonde", src: null, label: "Stijl 1" },
+  { id: "h14", color: "blonde", src: null, label: "Stijl 2" },
+  { id: "h15", color: "blonde", src: null, label: "Stijl 3" },
+  { id: "h16", color: "blonde", src: null, label: "Stijl 4" },
+  { id: "h17", color: "blonde", src: null, label: "Stijl 5" },
+  { id: "h18", color: "blonde", src: null, label: "Stijl 6" },
 ];
 
 // ★ Clothes options
@@ -176,7 +180,7 @@ function updateSwatchStyle(btn, value, selected) {
   const color = btn.dataset.color;
   btn.classList.toggle("selected", isSelected);
   if (isSelected) {
-    btn.style.boxShadow = "0 0 0 2px white, 0 0 0 6px #8B6F47";
+    btn.style.boxShadow = "0 0 0 2px white, 0 0 0 6px #c2221b";
   } else if (color === "#FFFFFF") {
     btn.style.boxShadow = "inset 0 0 0 1.5px #ddd";
   } else {
@@ -223,7 +227,7 @@ function buildThumbGrid(containerId, options, getSelected, onSelect) {
     const tick = document.createElement("div");
     tick.className = "thumb-tick";
     tick.textContent = "✓";
-    tick.style.cssText = "position:absolute;top:5px;right:5px;width:18px;height:18px;border-radius:50%;background:#8B6F47;color:white;font-size:10px;font-weight:900;align-items:center;justify-content:center;display:none;";
+    tick.style.cssText = "position:absolute;top:5px;right:5px;width:18px;height:18px;border-radius:50%;background:#c2221b;color:white;font-size:10px;font-weight:900;align-items:center;justify-content:center;display:none;";
     btn.appendChild(tick);
 
     btn.addEventListener("click", () => {
@@ -248,10 +252,10 @@ function makePlaceholderLabel(label) {
 function updateThumbStyle(btn, id, selected) {
   const isSelected = id === selected;
   btn.classList.toggle("selected", isSelected);
-  btn.style.borderColor = isSelected ? "#8B6F47" : "#E0D5C0";
+  btn.style.borderColor = isSelected ? "#c2221b" : "#E0D5C0";
   btn.style.borderWidth  = isSelected ? "3px" : "2px";
   btn.style.boxShadow    = isSelected
-    ? "0 0 0 2px white, 0 0 0 5px #8B6F47"
+    ? "0 0 0 2px white, 0 0 0 5px #c2221b"
     : "0 2px 8px rgba(0,0,0,0.07)";
   const tick = btn.querySelector(".thumb-tick");
   if (tick) tick.style.display = isSelected ? "flex" : "none";

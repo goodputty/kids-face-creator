@@ -25,7 +25,7 @@
 
     body {
       font-family: 'InterMush', 'Nunito', system-ui, sans-serif;
-      background: #F5F0E8;
+      background: #FFFBF7;
       height: 100vh;
       overflow: hidden;
       display: flex;
@@ -34,24 +34,24 @@
 
     /* ── Header ── */
     #header {
-      background: linear-gradient(135deg, #C8B99A, #A89070);
+      background: linear-gradient(135deg, #f6d1cb 0%, #f0ce5b 100%);
       padding: 12px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-shrink: 0;
-      box-shadow: 0 4px 16px rgba(120,90,60,0.2);
+      box-shadow: 0 4px 16px rgba(180,130,60,0.15);
     }
     #header .brand-sub {
       font-size: 9px; font-weight: 800;
-      color: rgba(255,255,255,0.75);
+      color: rgba(60,40,10,0.55);
       letter-spacing: 3px; text-transform: uppercase;
     }
     #header .brand-title {
-      font-size: 20px; font-weight: 900; color: white;
+      font-size: 20px; font-weight: 900; color: #3a2208;
     }
     #save-btn {
-      background: white; color: #8B6F47;
+      background: white; color: #3a2208;
       font-family: inherit; font-weight: 900; font-size: 14px;
       padding: 11px 22px; border-radius: 40px; border: none;
       cursor: pointer;
@@ -66,17 +66,15 @@
       flex: 1; display: flex; overflow: hidden; min-height: 0;
     }
 
-    /* ── Left: preview ── */
+    /* ── Left: preview — wider so portrait is bigger ── */
     #preview-col {
-      width: 42%; flex-shrink: 0;
-      padding: 16px 14px 16px 20px;
+      width: 50%; flex-shrink: 0;
+      padding: 12px 10px 12px 16px;
       display: flex; align-items: center; justify-content: center;
     }
     #portrait-outer {
       width: 100%;
-      max-width: 260px;
-      /* Cap height so portrait never overflows the body area */
-      max-height: calc(100vh - 70px);
+      max-height: calc(100vh - 66px);
       aspect-ratio: 2 / 3;
       position: relative;
     }
@@ -113,46 +111,43 @@
       display: flex; flex-direction: column; gap: 20px;
     }
     #options-col::-webkit-scrollbar { width: 4px; }
-    #options-col::-webkit-scrollbar-thumb { background: #C8B99A; border-radius: 4px; }
+    #options-col::-webkit-scrollbar-thumb { background: #f0ce5b; border-radius: 4px; }
 
     .section-label {
-      font-size: 11px; font-weight: 900; color: #8B6F47;
+      font-size: 11px; font-weight: 900; color: #c2221b;
       text-transform: uppercase; letter-spacing: 2.5px;
       display: flex; align-items: center; gap: 7px;
       margin-bottom: 10px;
     }
     .section-divider {
-      height: 1px; background: #E8E0D0; margin-top: 6px;
+      height: 1px; background: #f0e8dc; margin-top: 6px;
     }
 
     /* Colour swatches */
     .swatch-row { display: flex; gap: 8px; flex-wrap: wrap; }
 
-    /* ── Thumbnail grid — portrait ratio 2:3 ── */
+    /* ── Thumbnail grid — portrait ratio 2:3, smaller ── */
     .thumb-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
-      gap: 6px;
+      grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+      gap: 5px;
     }
     .thumb-btn {
       width: 100%;
       aspect-ratio: 2 / 3;
-      border-radius: 10px;
-      border: 2px solid #E0D5C0;
-      background: #F0EBE0;
+      border-radius: 8px;
+      border: 2px solid #e8ddd0;
+      background: #F5EFE8;
       cursor: pointer; overflow: hidden; padding: 0;
       position: relative;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
       transition: all 0.15s;
       display: flex; align-items: center; justify-content: center;
     }
-    .thumb-btn.none-btn {
-      aspect-ratio: 2 / 3;
-      background: #F5F0E8;
-    }
+    .thumb-btn.none-btn { background: #F8F3EE; }
     .thumb-btn.selected {
-      border: 3px solid #8B6F47;
-      box-shadow: 0 0 0 2px white, 0 0 0 5px #8B6F47;
+      border: 3px solid #c2221b;
+      box-shadow: 0 0 0 2px white, 0 0 0 5px #c2221b;
     }
     .thumb-btn img {
       width: 100%; height: 100%;
@@ -160,33 +155,33 @@
       object-position: top center;
     }
     .thumb-btn .thumb-label {
-      font-size: 8px; color: #B0A090; font-weight: 700;
-      text-align: center; padding: 3px; line-height: 1.3;
+      font-size: 7px; color: #C0A888; font-weight: 700;
+      text-align: center; padding: 2px; line-height: 1.3;
     }
     .thumb-tick {
-      display: none; position: absolute; top: 4px; right: 4px;
-      width: 16px; height: 16px; border-radius: 50%;
-      background: #8B6F47; color: white;
-      font-size: 9px; font-weight: 900;
+      display: none; position: absolute; top: 3px; right: 3px;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: #c2221b; color: white;
+      font-size: 8px; font-weight: 900;
       align-items: center; justify-content: center;
     }
     .thumb-btn.selected .thumb-tick { display: flex; }
 
-    /* ── Face thumbnails — portrait image buttons ── */
+    /* ── Face thumbnails ── */
     .face-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
-      gap: 6px;
+      grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+      gap: 5px;
     }
     .face-btn {
       width: 100%;
       aspect-ratio: 2 / 3;
-      border-radius: 10px;
-      border: 2px solid #E0D5C0;
-      background: #F0EBE0;
+      border-radius: 8px;
+      border: 2px solid #e8ddd0;
+      background: #F5EFE8;
       cursor: pointer; overflow: hidden; padding: 0;
       position: relative;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
       transition: all 0.15s;
     }
     .face-btn img {
@@ -195,91 +190,87 @@
       object-position: top center;
     }
     .face-btn.selected {
-      border: 3px solid #8B6F47;
-      box-shadow: 0 0 0 2px white, 0 0 0 5px #8B6F47;
+      border: 3px solid #c2221b;
+      box-shadow: 0 0 0 2px white, 0 0 0 5px #c2221b;
     }
     .face-btn .thumb-tick {
-      display: none; position: absolute; top: 4px; right: 4px;
-      width: 16px; height: 16px; border-radius: 50%;
-      background: #8B6F47; color: white;
-      font-size: 9px; font-weight: 900;
+      display: none; position: absolute; top: 3px; right: 3px;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: #c2221b; color: white;
+      font-size: 8px; font-weight: 900;
       align-items: center; justify-content: center;
     }
     .face-btn.selected .thumb-tick { display: flex; }
 
-    /* ── Hair colour swatches — small circles ── */
-    .haircolor-row {
-      display: flex; gap: 10px; flex-wrap: wrap;
-    }
+    /* ── Hair colour swatches ── */
+    .haircolor-row { display: flex; gap: 10px; flex-wrap: wrap; }
     .haircolor-btn {
-      width: 38px; height: 38px; border-radius: 50%;
-      border: 2px solid #E0D5C0;
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 2px solid #e8ddd0;
       cursor: pointer; flex-shrink: 0;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
       transition: all 0.15s;
       outline: 3px solid transparent; outline-offset: 3px;
     }
     .haircolor-btn.selected {
-      outline-color: #8B6F47;
-      box-shadow: 0 0 0 2px white, 0 0 0 6px #8B6F47;
+      outline-color: #c2221b;
+      box-shadow: 0 0 0 2px white, 0 0 0 6px #c2221b;
     }
 
     /* ── Name colour — "A" buttons ── */
-    .namecolor-row {
-      display: flex; gap: 8px; flex-wrap: wrap;
-    }
+    .namecolor-row { display: flex; gap: 7px; flex-wrap: wrap; }
     .namecolor-btn {
-      width: 44px; height: 44px; border-radius: 10px;
-      border: 2px solid #E0D5C0;
-      background: #F5F0E8;
+      width: 40px; height: 40px; border-radius: 8px;
+      border: 2px solid #e8ddd0;
+      background: #F8F3EE;
       cursor: pointer; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
-      font-size: 22px; font-weight: 900;
+      font-size: 20px; font-weight: 900;
       font-family: 'InterMush', system-ui;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.07);
       transition: all 0.15s;
       outline: 3px solid transparent; outline-offset: 3px;
     }
     .namecolor-btn.selected {
-      outline-color: #8B6F47;
-      box-shadow: 0 0 0 2px white, 0 0 0 6px #8B6F47;
-      border-color: #8B6F47;
+      outline-color: #c2221b;
+      box-shadow: 0 0 0 2px white, 0 0 0 6px #c2221b;
+      border-color: #c2221b;
     }
 
     /* ── Background colour — portrait rectangles ── */
     .bgcolor-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
-      gap: 6px;
+      grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+      gap: 5px;
     }
     .bgcolor-btn {
       width: 100%;
       aspect-ratio: 2 / 3;
-      border-radius: 10px;
-      border: 2px solid #E0D5C0;
+      border-radius: 8px;
+      border: 2px solid #e8ddd0;
       cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.10);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
       transition: all 0.15s;
       outline: 3px solid transparent; outline-offset: 3px;
     }
     .bgcolor-btn.selected {
-      outline-color: #8B6F47;
-      box-shadow: 0 0 0 2px white, 0 0 0 6px #8B6F47;
-      border-color: #8B6F47;
+      outline-color: #c2221b;
+      box-shadow: 0 0 0 2px white, 0 0 0 6px #c2221b;
+      border-color: #c2221b;
     }
 
     /* Name input */
     #name-input {
       width: 100%; padding: 14px 18px;
-      border-radius: 16px; border: 2px solid #E0D5C0;
+      border-radius: 16px; border: 2px solid #e8ddd0;
       font-size: 22px; font-weight: 900;
       font-family: 'InterMush', system-ui;
       background: #fff; outline: none;
       letter-spacing: 3px; text-transform: uppercase;
-      caret-color: #8B6F47;
+      caret-color: #c2221b;
       transition: border 0.15s;
     }
-    #name-input:focus { border-color: #8B6F47; }
+    #name-input:focus { border-color: #c2221b; }
   </style>
 </head>
 <body>
