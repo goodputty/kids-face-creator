@@ -34,13 +34,13 @@
 
     /* ── Header ── */
     #header {
-      background: linear-gradient(135deg, #f6d1cb 0%, #f0ce5b 100%);
+      background: #f0ce5b;
       padding: 12px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-shrink: 0;
-      box-shadow: 0 4px 16px rgba(180,130,60,0.15);
+      box-shadow: 0 4px 16px rgba(180,130,0,0.15);
     }
     #header .brand-sub {
       font-size: 9px; font-weight: 800;
@@ -66,15 +66,14 @@
       flex: 1; display: flex; overflow: hidden; min-height: 0;
     }
 
-    /* ── Left: preview — wider so portrait is bigger ── */
+    /* ── Left: preview — height-driven to enforce 2:3 strictly ── */
     #preview-col {
-      width: 50%; flex-shrink: 0;
+      flex-shrink: 0;
       padding: 12px 10px 12px 16px;
       display: flex; align-items: center; justify-content: center;
     }
     #portrait-outer {
-      width: 100%;
-      max-height: calc(100vh - 66px);
+      height: calc(100vh - 66px - 24px);
       aspect-ratio: 2 / 3;
       position: relative;
     }
@@ -146,8 +145,8 @@
     }
     .thumb-btn.none-btn { background: #F8F3EE; }
     .thumb-btn.selected {
-      border: 3px solid #c2221b;
-      box-shadow: 0 0 0 2px white, 0 0 0 5px #c2221b;
+      border: 3px solid #9a8a78;
+      box-shadow: none;
     }
     .thumb-btn img {
       width: 100%; height: 100%;
@@ -158,14 +157,7 @@
       font-size: 7px; color: #C0A888; font-weight: 700;
       text-align: center; padding: 2px; line-height: 1.3;
     }
-    .thumb-tick {
-      display: none; position: absolute; top: 3px; right: 3px;
-      width: 14px; height: 14px; border-radius: 50%;
-      background: #c2221b; color: white;
-      font-size: 8px; font-weight: 900;
-      align-items: center; justify-content: center;
-    }
-    .thumb-btn.selected .thumb-tick { display: flex; }
+    .thumb-tick { display: none; }
 
     /* ── Face thumbnails ── */
     .face-grid {
@@ -190,17 +182,10 @@
       object-position: top center;
     }
     .face-btn.selected {
-      border: 3px solid #c2221b;
-      box-shadow: 0 0 0 2px white, 0 0 0 5px #c2221b;
+      border: 3px solid #9a8a78;
+      box-shadow: none;
     }
-    .face-btn .thumb-tick {
-      display: none; position: absolute; top: 3px; right: 3px;
-      width: 14px; height: 14px; border-radius: 50%;
-      background: #c2221b; color: white;
-      font-size: 8px; font-weight: 900;
-      align-items: center; justify-content: center;
-    }
-    .face-btn.selected .thumb-tick { display: flex; }
+    .face-btn .thumb-tick { display: none; }
 
     /* ── Hair colour swatches ── */
     .haircolor-row { display: flex; gap: 10px; flex-wrap: wrap; }
@@ -210,11 +195,10 @@
       cursor: pointer; flex-shrink: 0;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
       transition: all 0.15s;
-      outline: 3px solid transparent; outline-offset: 3px;
     }
     .haircolor-btn.selected {
-      outline-color: #c2221b;
-      box-shadow: 0 0 0 2px white, 0 0 0 6px #c2221b;
+      border: 3px solid #9a8a78;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     }
 
     /* ── Name colour — "A" buttons ── */
@@ -229,12 +213,9 @@
       font-family: 'InterMush', system-ui;
       box-shadow: 0 2px 6px rgba(0,0,0,0.07);
       transition: all 0.15s;
-      outline: 3px solid transparent; outline-offset: 3px;
     }
     .namecolor-btn.selected {
-      outline-color: #c2221b;
-      box-shadow: 0 0 0 2px white, 0 0 0 6px #c2221b;
-      border-color: #c2221b;
+      border: 3px solid #9a8a78;
     }
 
     /* ── Background colour — portrait rectangles ── */
@@ -251,12 +232,9 @@
       cursor: pointer;
       box-shadow: 0 2px 6px rgba(0,0,0,0.08);
       transition: all 0.15s;
-      outline: 3px solid transparent; outline-offset: 3px;
     }
     .bgcolor-btn.selected {
-      outline-color: #c2221b;
-      box-shadow: 0 0 0 2px white, 0 0 0 6px #c2221b;
-      border-color: #c2221b;
+      border: 3px solid #9a8a78;
     }
 
     /* Name input */
@@ -279,7 +257,7 @@
 <div id="header">
   <div>
     <div class="brand-sub">Portraits by Jun-Yi</div>
-    <div class="brand-title">Make your own portrait! 🎨</div>
+    <div class="brand-title">Maak je eigen portret! 🎨</div>
   </div>
   <button id="save-btn">⬆️ Save &amp; AirDrop</button>
 </div>

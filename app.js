@@ -180,7 +180,7 @@ function updateSwatchStyle(btn, value, selected) {
   const color = btn.dataset.color;
   btn.classList.toggle("selected", isSelected);
   if (isSelected) {
-    btn.style.boxShadow = "0 0 0 2px white, 0 0 0 6px #c2221b";
+    btn.style.boxShadow = "none";
   } else if (color === "#FFFFFF") {
     btn.style.boxShadow = "inset 0 0 0 1.5px #ddd";
   } else {
@@ -252,13 +252,13 @@ function makePlaceholderLabel(label) {
 function updateThumbStyle(btn, id, selected) {
   const isSelected = id === selected;
   btn.classList.toggle("selected", isSelected);
-  btn.style.borderColor = isSelected ? "#c2221b" : "#E0D5C0";
+  btn.style.borderColor = isSelected ? "#9a8a78" : "#e8ddd0";
   btn.style.borderWidth  = isSelected ? "3px" : "2px";
   btn.style.boxShadow    = isSelected
-    ? "0 0 0 2px white, 0 0 0 5px #c2221b"
+    ? "none"
     : "0 2px 8px rgba(0,0,0,0.07)";
   const tick = btn.querySelector(".thumb-tick");
-  if (tick) tick.style.display = isSelected ? "flex" : "none";
+  // tick hidden
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
