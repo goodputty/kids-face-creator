@@ -4,12 +4,12 @@
 
 // ★ Your 7 brand colours (same set used for background and name colour)
 const BRAND_COLORS = [
-  "#f6d1cb",
-  "#f0ce5b",
-  "#3351c6",
-  "#c2221b",
-  "#1c7b1c",
-  "#d77326",
+  "#F9C5D1",
+  "#FDDBB4",
+  "#FFF3B0",
+  "#C7EFC6",
+  "#B8E0FF",
+  "#D4B8FF",
   "#FFFFFF",
 ];
 
@@ -31,24 +31,18 @@ const HAIR_COLORS = [
 // color must match an id from HAIR_COLORS so the grid filters correctly
 // e.g. { id: "black-pigtails", color: "black", src: "images/hair-black-pigtails.png", label: "Staartjes" }
 const HAIR_OPTIONS = [
-  { id: "h1", color: "black", src: "images/hair-black-1.png", label: "Stijl 1" },
-  { id: "h2", color: "black", src: "images/hair-black-2.png", label: "Stijl 2" },
+  { id: "h1",  color: "black",  src: null, label: "Stijl 1" },
+  { id: "h2",  color: "black",  src: null, label: "Stijl 2" },
   { id: "h3",  color: "black",  src: null, label: "Stijl 3" },
   { id: "h4",  color: "black",  src: null, label: "Stijl 4" },
-  { id: "h5",  color: "black",  src: null, label: "Stijl 5" },
-  { id: "h6",  color: "black",  src: null, label: "Stijl 6" },
-  { id: "h7",  color: "brown",  src: null, label: "Stijl 1" },
-  { id: "h8",  color: "brown",  src: null, label: "Stijl 2" },
-  { id: "h9",  color: "brown",  src: null, label: "Stijl 3" },
-  { id: "h10", color: "brown",  src: null, label: "Stijl 4" },
-  { id: "h11", color: "brown",  src: null, label: "Stijl 5" },
-  { id: "h12", color: "brown",  src: null, label: "Stijl 6" },
-  { id: "h13", color: "blonde", src: null, label: "Stijl 1" },
-  { id: "h14", color: "blonde", src: null, label: "Stijl 2" },
-  { id: "h15", color: "blonde", src: null, label: "Stijl 3" },
-  { id: "h16", color: "blonde", src: null, label: "Stijl 4" },
-  { id: "h17", color: "blonde", src: null, label: "Stijl 5" },
-  { id: "h18", color: "blonde", src: null, label: "Stijl 6" },
+  { id: "h5",  color: "brown",  src: null, label: "Stijl 1" },
+  { id: "h6",  color: "brown",  src: null, label: "Stijl 2" },
+  { id: "h7",  color: "brown",  src: null, label: "Stijl 3" },
+  { id: "h8",  color: "brown",  src: null, label: "Stijl 4" },
+  { id: "h9",  color: "blonde", src: null, label: "Stijl 1" },
+  { id: "h10", color: "blonde", src: null, label: "Stijl 2" },
+  { id: "h11", color: "blonde", src: null, label: "Stijl 3" },
+  { id: "h12", color: "blonde", src: null, label: "Stijl 4" },
 ];
 
 // ★ Clothes options
@@ -394,9 +388,115 @@ if ("serviceWorker" in navigator) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// INIT
+// SPECIALISED BUILDERS
 // ═══════════════════════════════════════════════════════════════════════════
-// Builds hair grid filtered to currently selected hair colour
+
+// Face thumbnails — portrait image buttons
+function buildFaceGrid(containerId, options, getSelected, onSelect) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = "";
+  options.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.className = "face-btn" + (getSelected() === opt.id ? " selected" : "");
+    btn.dataset.id = opt.id;
+
+    if (opt.src) {
+      const img = document.createElement("img");
+      img.src = opt.src;
+      img.alt = opt.label;
+      img.onerror = () => { btn.style.background = opt.color; };
+      btn.appendChild(img);
+    } else {
+      btn.style.background = opt.color;
+    }
+
+    const tick = document.createElement("div");
+    tick.className = "thumb-tick";
+    tick.textContent = "✓";
+    tick.style.display = getSelected() === opt.id ? "flex" : "none";
+    btn.appendChild(tick);
+
+    btn.addEventListener("click", () => {
+      onSelect(opt.id);
+      render();
+      container.querySelectorAll(".face-btn").forEach(b => {
+        const isSelected = b.dataset.id === getSelected();
+        b.classList.toggle("selected", isSelected);
+        b.querySelector(".thumb-tick").style.display = isSelected ? "flex" : "none";
+      });
+    });
+    container.appendChild(btn);
+  });
+}
+
+// Hair colour — circle swatches
+function buildHairColorRow(containerId, options, getSelected, onSelect) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = "";
+  options.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.className = "haircolor-btn" + (getSelected() === opt.id ? " selected" : "");
+    btn.dataset.id = opt.id;
+    btn.style.background = opt.color;
+    if (opt.color === "#000000") btn.style.border = "2px solid #555";
+    btn.title = opt.label;
+
+    btn.addEventListener("click", () => {
+      onSelect(opt.id);
+      container.querySelectorAll(".haircolor-btn").forEach(b => {
+        b.classList.toggle("selected", b.dataset.id === getSelected());
+      });
+    });
+    container.appendChild(btn);
+  });
+}
+
+// Name colour — "A" letter buttons
+function buildNameColorRow(containerId, colors, getSelected, onSelect) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = "";
+  colors.forEach(color => {
+    const btn = document.createElement("button");
+    btn.className = "namecolor-btn" + (getSelected() === color ? " selected" : "");
+    btn.dataset.color = color;
+    btn.textContent = "A";
+    btn.style.color = color;
+    if (color === "#FFFFFF") btn.style.textShadow = "0 0 0 1px #ddd";
+
+    btn.addEventListener("click", () => {
+      onSelect(color);
+      render();
+      container.querySelectorAll(".namecolor-btn").forEach(b => {
+        b.classList.toggle("selected", b.dataset.color === getSelected());
+      });
+    });
+    container.appendChild(btn);
+  });
+}
+
+// Background colour — portrait rectangles
+function buildBgColorGrid(containerId, colors, getSelected, onSelect) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = "";
+  colors.forEach(color => {
+    const btn = document.createElement("button");
+    btn.className = "bgcolor-btn" + (getSelected() === color ? " selected" : "");
+    btn.dataset.color = color;
+    btn.style.background = color;
+    if (color === "#FFFFFF") btn.style.borderColor = "#ddd";
+
+    btn.addEventListener("click", () => {
+      onSelect(color);
+      render();
+      container.querySelectorAll(".bgcolor-btn").forEach(b => {
+        b.classList.toggle("selected", b.dataset.color === getSelected());
+      });
+    });
+    container.appendChild(btn);
+  });
+}
+
+// Filtered hair grid
 function buildFilteredHairGrid() {
   const filtered = HAIR_OPTIONS.filter(h => h.color === state.hairColor);
   buildThumbGrid("hair-grid", filtered, () => state.hair, v => { state.hair = v; });
@@ -404,21 +504,19 @@ function buildFilteredHairGrid() {
 }
 
 function init() {
-  buildSwatches("skin-swatches",       FACE_OPTIONS.map(f => ({ color: f.color, id: f.id })),
+  buildFaceGrid("skin-swatches",       FACE_OPTIONS,
     () => state.face,      v => { state.face      = v; });
-  buildSwatches("hair-color-swatches", HAIR_COLORS.map(h => ({ color: h.color, id: h.id })),
+  buildHairColorRow("hair-color-swatches", HAIR_COLORS,
     () => state.hairColor, v => {
       state.hairColor = v;
-      // Auto-select first hair of new colour
       const first = HAIR_OPTIONS.find(h => h.color === v);
       if (first) state.hair = first.id;
-      // Rebuild the hair grid filtered to new colour
       buildFilteredHairGrid();
     });
-  buildSwatches("bg-swatches",         BRAND_COLORS,
-    () => state.bgColor,   v => { state.bgColor   = v; });
-  buildSwatches("name-swatches",       BRAND_COLORS,
+  buildNameColorRow("name-swatches",   BRAND_COLORS,
     () => state.nameColor, v => { state.nameColor = v; });
+  buildBgColorGrid("bg-swatches",      BRAND_COLORS,
+    () => state.bgColor,   v => { state.bgColor   = v; });
   buildFilteredHairGrid();
   buildThumbGrid("clothes-grid",  CLOTHES_OPTIONS,   () => state.clothes,   v => { state.clothes   = v; });
   buildThumbGrid("acc-grid",      ACCESSORY_OPTIONS, () => state.accessory, v => { state.accessory = v; });
