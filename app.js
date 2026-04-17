@@ -34,7 +34,7 @@ const HAIR_OPTIONS = [
   { id: "h1", color: "black", src: "images/hair-black-1.png", label: "Stijl 1" },
   { id: "h2", color: "black", src: "images/hair-black-2.png", label: "Stijl 2" },
   { id: "h3", color: "black",  src: "images/hair-black-3.png", label: "Stijl 3" },
-  { id: "h4",  color: "black",  src: null, label: "Stijl 4" },
+  { id: "h4", color: "black",  src: "images/hair-black-4.png", label: "Stijl 4" },
   { id: "h5",  color: "brown",  src: null, label: "Stijl 1" },
   { id: "h6",  color: "brown",  src: null, label: "Stijl 2" },
   { id: "h7",  color: "brown",  src: null, label: "Stijl 3" },
