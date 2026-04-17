@@ -4,12 +4,12 @@
 
 // ★ Your 7 brand colours (same set used for background and name colour)
 const BRAND_COLORS = [
-  "#F9C5D1",
-  "#FDDBB4",
-  "#FFF3B0",
-  "#C7EFC6",
-  "#B8E0FF",
-  "#D4B8FF",
+  "#f6d1cb",
+  "#f0ce5b",
+  "#3351c6",
+  "#c2221b",
+  "#1c7b1c",
+  "#d77326",
   "#FFFFFF",
 ];
 
@@ -31,9 +31,9 @@ const HAIR_COLORS = [
 // color must match an id from HAIR_COLORS so the grid filters correctly
 // e.g. { id: "black-pigtails", color: "black", src: "images/hair-black-pigtails.png", label: "Staartjes" }
 const HAIR_OPTIONS = [
-  { id: "h1",  color: "black",  src: null, label: "Stijl 1" },
-  { id: "h2",  color: "black",  src: null, label: "Stijl 2" },
-  { id: "h3",  color: "black",  src: null, label: "Stijl 3" },
+  { id: "h1", color: "black", src: "images/hair-black-1.png", label: "Stijl 1" },
+  { id: "h2", color: "black", src: "images/hair-black-2.png", label: "Stijl 2" },
+  { id: "h3", color: "black",  src: "images/hair-black-3.png", label: "Stijl 3" },
   { id: "h4",  color: "black",  src: null, label: "Stijl 4" },
   { id: "h5",  color: "brown",  src: null, label: "Stijl 1" },
   { id: "h6",  color: "brown",  src: null, label: "Stijl 2" },
@@ -60,9 +60,6 @@ const ACCESSORY_OPTIONS = [
   { id: "none", src: null, label: "None" },
   { id: "a1",   src: null, label: "Party hat" },
   { id: "a2",   src: null, label: "Crown" },
-  { id: "a3",   src: null, label: "Bow" },
-  { id: "a4",   src: null, label: "Glasses" },
-  { id: "a5",   src: null, label: "Bunny ears" },
 ];
 
 // ★ Print canvas size — do not change unless you change your PNG dimensions
