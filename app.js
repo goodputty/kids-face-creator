@@ -75,7 +75,7 @@ const state = {
   hairColor: HAIR_COLORS[0].id,
   hair:      HAIR_OPTIONS[0].id,
   clothes:   CLOTHES_OPTIONS[0].id,
-  accessory: "none",
+  accessory: "a1",
   name:      "Naam",
   nameColor: BRAND_COLORS[4],
 };
