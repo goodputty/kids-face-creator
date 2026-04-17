@@ -55,11 +55,11 @@ const CLOTHES_OPTIONS = [
   { id: "c6", src: null, label: "Outfit 6" },
 ];
 
-// ★ Accessory options — keep "none" first
+// ★ Accessory options — keep "none" last
 const ACCESSORY_OPTIONS = [
-  { id: "none", src: null, label: "None" },
   { id: "a1",   src: null, label: "Party hat" },
   { id: "a2",   src: null, label: "Crown" },
+  { id: "none", src: null, label: "None" },
 ];
 
 // ★ Print canvas size — do not change unless you change your PNG dimensions
