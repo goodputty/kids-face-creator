@@ -139,9 +139,25 @@ function render() {
     layerAcc.style.display = "none";
   }
 
-  // Name overlay
+  // Name overlay — dynamic font size to fit width
   layerName.textContent = state.name ? state.name.toUpperCase() : "";
   layerName.style.color = state.nameColor;
+
+  // Calculate font size: start large, shrink to fit
+  if (state.name) {
+    const maxSize = Math.round(portraitWrap.offsetHeight * 0.10); // 10% of portrait height
+    const minSize = Math.round(portraitWrap.offsetHeight * 0.04); // 4% minimum
+    const availWidth = portraitWrap.offsetWidth * 0.88; // 88% of width with padding
+    let size = maxSize;
+    layerName.style.fontSize = size + "px";
+    // Shrink until text fits
+    while (layerName.scrollWidth > availWidth && size > minSize) {
+      size -= 1;
+      layerName.style.fontSize = size + "px";
+    }
+  } else {
+    layerName.style.fontSize = "";
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
