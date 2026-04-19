@@ -139,24 +139,10 @@ function render() {
     layerAcc.style.display = "none";
   }
 
-  // Name overlay — always fill the full available width, shrink for longer names
+  // Name overlay — fill maximum width, shrink for longer names
   layerName.textContent = state.name ? state.name.toUpperCase() : "";
   layerName.style.color = state.nameColor;
-
-  // Run after paint so offsetWidth is accurate
-  requestAnimationFrame(() => {
-    const text = layerName.textContent;
-    if (!text) { layerName.style.fontSize = ""; return; }
-    const availWidth = portraitWrap.offsetWidth * 0.88;
-    const maxSize = Math.round(portraitWrap.offsetHeight * 0.12);
-    const minSize = Math.round(portraitWrap.offsetHeight * 0.04);
-    let size = maxSize;
-    layerName.style.fontSize = size + "px";
-    while (layerName.scrollWidth > availWidth && size > minSize) {
-      size--;
-      layerName.style.fontSize = size + "px";
-    }
-  });
+  fitNameText();
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -567,5 +553,39 @@ function init() {
 
   render();
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// NAME SIZING — always fills maximum width, shrinks for longer names
+// ─────────────────────────────────────────────────────────────────────────────
+function fitNameText() {
+  const text = layerName.textContent;
+  if (!text || !portraitWrap.offsetWidth) return;
+
+  const availWidth = portraitWrap.offsetWidth * 0.86;
+  const maxSize    = Math.round(portraitWrap.offsetHeight * 0.13);
+  const minSize    = Math.round(portraitWrap.offsetHeight * 0.04);
+
+  // Binary search for the largest size that fits
+  let lo = minSize, hi = maxSize, best = minSize;
+  while (lo <= hi) {
+    const mid = Math.round((lo + hi) / 2);
+    layerName.style.fontSize = mid + "px";
+    if (layerName.scrollWidth <= availWidth) {
+      best = mid;
+      lo = mid + 1;
+    } else {
+      hi = mid - 1;
+    }
+  }
+  layerName.style.fontSize = best + "px";
+}
+
+// Re-fit on window resize
+window.addEventListener("resize", fitNameText);
+
+// Re-fit once fonts are definitely loaded
+document.fonts.ready.then(() => {
+  fitNameText();
+});
 
 init();
