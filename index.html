@@ -66,15 +66,17 @@
       flex: 1; display: flex; overflow: hidden; min-height: 0;
     }
 
-    /* ── Left: preview — exactly 50% width, portrait centred ── */
+    /* ── Left: preview — exactly 50% width, portrait fills it ── */
     #preview-col {
       width: 50%;
       flex-shrink: 0;
-      padding: 24px 10px 24px 16px;
+      padding: 24px 16px;
       display: flex; align-items: center; justify-content: center;
+      box-sizing: border-box;
     }
     #portrait-outer {
-      height: calc(100vh - 66px - 48px);
+      width: 100%;
+      max-width: calc((100vh - 66px - 48px) * 2 / 3);
       aspect-ratio: 2 / 3;
       position: relative;
     }
