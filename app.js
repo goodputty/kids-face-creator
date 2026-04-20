@@ -555,18 +555,30 @@ function init() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// NAME SIZING — always fills maximum width, shrinks for longer names
+// NAME SIZING
 // ─────────────────────────────────────────────────────────────────────────────
 function fitNameText() {
   const text = layerName.textContent;
-  if (!text || !portraitWrap.offsetWidth) return;
+  if (!text) return;
 
-  const availWidth = portraitWrap.offsetWidth * 0.86;
-  const maxSize    = Math.round(portraitWrap.offsetHeight * 0.13);
-  const minSize    = Math.round(portraitWrap.offsetHeight * 0.04);
+  // getBoundingClientRect is more reliable than offsetWidth for transformed/flex elements
+  const wrapRect = portraitWrap.getBoundingClientRect();
+  const wrapW = wrapRect.width;
+  const wrapH = wrapRect.height;
 
-  // Binary search for the largest size that fits
+  if (!wrapW || !wrapH) {
+    // Not painted yet — try again shortly
+    setTimeout(fitNameText, 50);
+    return;
+  }
+
+  const availWidth = wrapW * 0.86;
+  const maxSize    = Math.round(wrapH * 0.13);
+  const minSize    = Math.round(wrapH * 0.04);
+
+  // Binary search for largest size that fits
   let lo = minSize, hi = maxSize, best = minSize;
+  layerName.style.whiteSpace = "nowrap";
   while (lo <= hi) {
     const mid = Math.round((lo + hi) / 2);
     layerName.style.fontSize = mid + "px";
@@ -580,12 +592,10 @@ function fitNameText() {
   layerName.style.fontSize = best + "px";
 }
 
-// Re-fit on window resize
 window.addEventListener("resize", fitNameText);
-
-// Re-fit once fonts are definitely loaded
-document.fonts.ready.then(() => {
-  fitNameText();
-});
+document.fonts.ready.then(() => { fitNameText(); });
 
 init();
+
+// Extra safety: run again after everything has settled
+setTimeout(fitNameText, 300);
