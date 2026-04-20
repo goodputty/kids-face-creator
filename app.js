@@ -95,6 +95,7 @@ const layerClothes = document.getElementById("layer-clothes");
 const layerHair    = document.getElementById("layer-hair");
 const layerAcc     = document.getElementById("layer-acc");
 const layerName    = document.getElementById("layer-name");
+const nameText     = document.getElementById("name-text");
 const nameInput    = document.getElementById("name-input");
 const saveBtn      = document.getElementById("save-btn");
 
@@ -139,20 +140,14 @@ function render() {
     layerAcc.style.display = "none";
   }
 
-  // Name overlay
-  layerName.textContent = state.name ? state.name.toUpperCase() : "";
-  layerName.style.color = state.nameColor;
-  layerName.style.fontSize = ""; // reset to CSS 11vw
-
-  setTimeout(() => {
-    if (!layerName.textContent) return;
-    const available = portraitWrap.offsetWidth * 0.86;
-    if (layerName.scrollWidth > available) {
-      const currentSize = parseFloat(getComputedStyle(layerName).fontSize);
-      const ratio = available / layerName.scrollWidth;
-      layerName.style.fontSize = Math.floor(currentSize * ratio) + "px";
-    }
-  }, 0);
+  // Name — SVG text auto-scales to fit width
+  const nameVal = state.name ? state.name.toUpperCase() : "";
+  nameText.textContent = nameVal;
+  nameText.setAttribute("fill", state.nameColor);
+  // textLength forces SVG to compress/expand to exactly this width
+  // For short names use natural size (cap at 86% width), for long names compress
+  nameText.setAttribute("textLength", nameVal.length > 4 ? "86%" : `${Math.min(86, nameVal.length * 20)}%`);
+  nameText.setAttribute("lengthAdjust", "spacingAndGlyphs");
 }
 
 // ═══════════════════════════════════════════════════════════════════════════

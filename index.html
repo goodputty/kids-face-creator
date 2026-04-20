@@ -95,19 +95,7 @@
     #layer-clothes{ object-fit: contain; }
     #layer-hair   { object-fit: contain; }
     #layer-acc    { object-fit: contain; }
-    #layer-name {
-      display: flex; align-items: flex-end; justify-content: center;
-      padding-bottom: 5%;
-      font-family: 'InterMush', system-ui;
-      font-weight: 900;
-      font-size: 11vw;
-      letter-spacing: 3px; text-transform: uppercase;
-      pointer-events: none;
-      text-align: center;
-      background: transparent !important;
-      white-space: nowrap;
-      overflow: hidden;
-    }
+    /* name rendered via SVG */
 
     /* ── Right: options — exactly 50% width ── */
     #options-col {
@@ -284,8 +272,21 @@
       <img id="layer-hair"    style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="hair" />
       <img id="layer-acc"     style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="accessory" />
 
-      <!-- Name overlay -->
-      <div id="layer-name"></div>
+      <!-- Name overlay — SVG auto-scales text to fit width -->
+      <svg id="layer-name" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;">
+        <text id="name-text"
+          x="50%" y="93%"
+          text-anchor="middle"
+          dominant-baseline="auto"
+          font-family="InterMush, system-ui"
+          font-weight="900"
+          letter-spacing="3"
+          text-length="86%"
+          length-adjust="spacingAndGlyphs"
+          font-size="13%"
+          fill="green"
+        ></text>
+      </svg>
     </div><!-- end portrait-wrap -->
     </div><!-- end portrait-outer -->
   </div>
