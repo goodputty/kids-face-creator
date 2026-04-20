@@ -146,7 +146,7 @@ function render() {
   nameText.setAttribute("fill", state.nameColor);
   // textLength forces SVG to compress/expand to exactly this width
   // For short names use natural size (cap at 86% width), for long names compress
-  nameText.setAttribute("textLength", nameVal.length > 4 ? "86%" : `${Math.min(86, nameVal.length * 20)}%`);
+  nameText.setAttribute("textLength", nameVal.length > 4 ? "80%" : `${Math.min(80, nameVal.length * 18)}%`);
   nameText.setAttribute("lengthAdjust", "spacingAndGlyphs");
 }
 
