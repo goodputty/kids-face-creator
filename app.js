@@ -140,13 +140,14 @@ function render() {
     layerAcc.style.display = "none";
   }
 
-  // Name — SVG text auto-scales to fit width
+  // Name — SVG text scales to fit within 80 units wide (out of 100 viewBox)
   const nameVal = state.name ? state.name.toUpperCase() : "";
   nameText.textContent = nameVal;
   nameText.setAttribute("fill", state.nameColor);
-  // textLength forces SVG to compress/expand to exactly this width
-  // For short names use natural size (cap at 86% width), for long names compress
-  nameText.setAttribute("textLength", nameVal.length > 4 ? "80%" : `${Math.min(80, nameVal.length * 18)}%`);
+  // Short names get natural width up to 80, long names always compress to 80
+  const charCount = nameVal.length || 1;
+  const naturalWidth = charCount * 16; // rough px per char in viewBox units
+  nameText.setAttribute("textLength", Math.min(80, naturalWidth));
   nameText.setAttribute("lengthAdjust", "spacingAndGlyphs");
 }
 

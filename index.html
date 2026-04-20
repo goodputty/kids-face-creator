@@ -273,17 +273,16 @@
       <img id="layer-acc"     style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="accessory" />
 
       <!-- Name overlay — SVG auto-scales text to fit width -->
-      <svg id="layer-name" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;">
+      <svg id="layer-name" viewBox="0 0 100 150" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;">
         <text id="name-text"
-          x="50%" y="91%"
+          x="50" y="143"
           text-anchor="middle"
           dominant-baseline="auto"
           font-family="InterMush, system-ui"
           font-weight="900"
-          letter-spacing="3"
-          text-length="80%"
-          length-adjust="spacingAndGlyphs"
-          font-size="13%"
+          textLength="80"
+          lengthAdjust="spacingAndGlyphs"
+          font-size="14"
           fill="green"
         ></text>
       </svg>
