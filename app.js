@@ -37,12 +37,12 @@ const HAIR_OPTIONS = [
   { id: "h4",  color: "black",  src: "images/hair-black-4.png", label: "Stijl 4" },
   { id: "h5",  color: "black",  src: "images/hair-black-5.png", label: "Stijl 5" },
   { id: "h6",  color: "black",  src: "images/hair-black-6.png", label: "Stijl 6" },
-  { id: "h7",  color: "brown",  src: "images/hair-brown-1.png", label: "Stijl 1" },
-  { id: "h8",  color: "brown",  src: "images/hair-brown-2.png", label: "Stijl 2" },
-  { id: "h9",  color: "brown",  src: "images/hair-brown-3.png", label: "Stijl 3" },
-  { id: "h10", color: "brown",  src: "images/hair-brown-4.png", label: "Stijl 4" },
-  { id: "h11", color: "brown",  src: "images/hair-brown-5.png", label: "Stijl 5" },
-  { id: "h12", color: "brown",  src: "images/hair-brown-6.png", label: "Stijl 6" },
+  { id: "h7",  color: "brown",  src: null, label: "Stijl 1" },
+  { id: "h8",  color: "brown",  src: null, label: "Stijl 2" },
+  { id: "h9",  color: "brown",  src: null, label: "Stijl 3" },
+  { id: "h10", color: "brown",  src: null, label: "Stijl 4" },
+  { id: "h11", color: "brown",  src: null, label: "Stijl 5" },
+  { id: "h12", color: "brown",  src: null, label: "Stijl 6" },
   { id: "h13", color: "blonde", src: null, label: "Stijl 1" },
   { id: "h14", color: "blonde", src: null, label: "Stijl 2" },
   { id: "h15", color: "blonde", src: null, label: "Stijl 3" },
@@ -142,6 +142,17 @@ function render() {
   // Name overlay
   layerName.textContent = state.name ? state.name.toUpperCase() : "";
   layerName.style.color = state.nameColor;
+  layerName.style.fontSize = ""; // reset to CSS 11vw
+
+  setTimeout(() => {
+    if (!layerName.textContent) return;
+    const available = portraitWrap.offsetWidth * 0.86;
+    if (layerName.scrollWidth > available) {
+      const currentSize = parseFloat(getComputedStyle(layerName).fontSize);
+      const ratio = available / layerName.scrollWidth;
+      layerName.style.fontSize = Math.floor(currentSize * ratio) + "px";
+    }
+  }, 0);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
