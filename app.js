@@ -37,13 +37,13 @@ const HAIR_OPTIONS = [
   { id: "h4",  color: "black",  src: "images/hair-black-4.png", label: "Stijl 4" },
   { id: "h5",  color: "black",  src: "images/hair-black-5.png", label: "Stijl 5" },
   { id: "h6",  color: "black",  src: "images/hair-black-6.png", label: "Stijl 6" },
-  { id: "h7",  color: "brown",  src: "images/hair-brown-1.png", label: "Stijl 1" },
-  { id: "h8",  color: "brown",  src: "images/hair-brown-2.png", label: "Stijl 2" },
-  { id: "h9",  color: "brown",  src: "images/hair-brown-3.png", label: "Stijl 3" },
-  { id: "h10", color: "brown",  src: "images/hair-brown-4.png", label: "Stijl 4" },
-  { id: "h11", color: "brown",  src: "images/hair-brown-5.png", label: "Stijl 5" },
-  { id: "h12", color: "brown",  src: "images/hair-brown-6.png", label: "Stijl 6" },
-  { id: "h13", color: "blonde", src: "images/hair-blonde-1.png", label: "Stijl 1" },
+  { id: "h7",  color: "brown",  src: null, label: "Stijl 1" },
+  { id: "h8",  color: "brown",  src: null, label: "Stijl 2" },
+  { id: "h9",  color: "brown",  src: null, label: "Stijl 3" },
+  { id: "h10", color: "brown",  src: null, label: "Stijl 4" },
+  { id: "h11", color: "brown",  src: null, label: "Stijl 5" },
+  { id: "h12", color: "brown",  src: null, label: "Stijl 6" },
+  { id: "h13", color: "blonde", src: null, label: "Stijl 1" },
   { id: "h14", color: "blonde", src: null, label: "Stijl 2" },
   { id: "h15", color: "blonde", src: null, label: "Stijl 3" },
   { id: "h16", color: "blonde", src: null, label: "Stijl 4" },
@@ -140,15 +140,28 @@ function render() {
     layerAcc.style.display = "none";
   }
 
-  // Name — SVG text scales to fit within 80 units wide (out of 100 viewBox)
+  // Name — SVG text, font size based on actual portrait pixel dimensions
   const nameVal = state.name ? state.name.toUpperCase() : "";
   nameText.textContent = nameVal;
   nameText.setAttribute("fill", state.nameColor);
-  // Short names get natural width up to 80, long names always compress to 80
-  const charCount = nameVal.length || 1;
-  const naturalWidth = charCount * 16; // rough px per char in viewBox units
-  nameText.setAttribute("textLength", Math.min(80, naturalWidth));
-  nameText.setAttribute("lengthAdjust", "spacingAndGlyphs");
+
+  // Use real pixel dimensions — run after layout
+  setTimeout(() => {
+    const w = portraitWrap.offsetWidth;
+    const h = portraitWrap.offsetHeight;
+    if (!w || !h) return;
+    const maxFontSize = Math.round(h * 0.115);
+    const maxWidth    = Math.round(w * 0.80);
+    nameText.setAttribute("font-size", maxFontSize);
+    nameText.removeAttribute("textLength");
+    nameText.removeAttribute("lengthAdjust");
+    // Measure natural width, compress if too wide
+    const naturalW = nameText.getComputedTextLength();
+    if (naturalW > maxWidth) {
+      nameText.setAttribute("textLength", maxWidth);
+      nameText.setAttribute("lengthAdjust", "spacingAndGlyphs");
+    }
+  }, 50);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
