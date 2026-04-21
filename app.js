@@ -144,22 +144,20 @@ function render() {
   const nameVal = state.name ? state.name.toUpperCase() : "";
   nameText.textContent = nameVal;
   nameText.setAttribute("fill", state.nameColor);
+  nameText.removeAttribute("textLength");
+  nameText.removeAttribute("lengthAdjust");
 
-  // Use real pixel dimensions — run after layout
   setTimeout(() => {
     const w = portraitWrap.offsetWidth;
     const h = portraitWrap.offsetHeight;
     if (!w || !h) return;
-    const maxFontSize = Math.round(h * 0.115);
-    const maxWidth    = Math.round(w * 0.80);
-    nameText.setAttribute("font-size", maxFontSize);
-    nameText.removeAttribute("textLength");
-    nameText.removeAttribute("lengthAdjust");
-    // Measure natural width, compress if too wide
-    const naturalW = nameText.getComputedTextLength();
-    if (naturalW > maxWidth) {
-      nameText.setAttribute("textLength", maxWidth);
-      nameText.setAttribute("lengthAdjust", "spacingAndGlyphs");
+    const maxWidth = Math.round(w * 0.82);
+    let fontSize = Math.round(h * 0.16); // start bigger
+    nameText.setAttribute("font-size", fontSize);
+    // Shrink font size until text fits — no condensing
+    while (nameText.getComputedTextLength() > maxWidth && fontSize > 10) {
+      fontSize -= 1;
+      nameText.setAttribute("font-size", fontSize);
     }
   }, 50);
 }
