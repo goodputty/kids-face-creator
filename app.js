@@ -59,12 +59,12 @@ const CLOTHES_OPTIONS = [
   { id: "c4", src: "images/outfit-4.png", label: "Outfit 4" },
   { id: "c5", src: "images/outfit-5.png", label: "Outfit 5" },
   { id: "c6", src: "images/outfit-6.png", label: "Outfit 6" },
-  { id: "c1", src: "images/outfit-7.png", label: "Outfit 7" },
-  { id: "c2", src: "images/outfit-8.png", label: "Outfit 8" },
-  { id: "c3", src: "images/outfit-9.png", label: "Outfit 9" },
-  { id: "c4", src: "images/outfit-10.png", label: "Outfit 10" },
-  { id: "c5", src: "images/outfit-11.png", label: "Outfit 11" },
-  { id: "c6", src: "images/outfit-12.png", label: "Outfit 12" },
+  { id: "c7", src: "images/outfit-7.png", label: "Outfit 7" },
+  { id: "c8", src: "images/outfit-8.png", label: "Outfit 8" },
+  { id: "c9", src: "images/outfit-9.png", label: "Outfit 9" },
+  { id: "c10", src: "images/outfit-10.png", label: "Outfit 10" },
+  { id: "c11", src: "images/outfit-11.png", label: "Outfit 11" },
+  { id: "c12", src: "images/outfit-12.png", label: "Outfit 12" },
 ];
 
 // ★ Accessory options — keep "none" last
