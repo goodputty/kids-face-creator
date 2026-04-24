@@ -321,9 +321,10 @@ async function exportPortrait() {
     await drawImage(hair?.src);
     if (state.accessory !== "none") await drawImage(acc?.src);
 
-    // Name text
+    // Name text — wait for font to load before drawing
     if (state.name.trim()) {
       const fontSize = Math.round(PRINT_H * 0.072);
+      try { await document.fonts.load(`900 ${fontSize}px InterMush`); } catch(e) {}
       ctx.font         = `900 ${fontSize}px InterMush, system-ui, sans-serif`;
       ctx.fillStyle    = state.nameColor;
       ctx.textAlign    = "center";
@@ -343,15 +344,18 @@ async function exportPortrait() {
     // Try AirDrop / native share sheet first
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
+        // Show reset overlay immediately — on iOS share resolves on dismiss not delivery
+        showResetOverlay();
         await navigator.share({ files: [file], title: "My Portrait" });
         showMessage("✅ Shared! Check AirDrop on your Mac.", "success");
-        showResetOverlay();
         return;
       } catch (err) {
         if (err.name === "AbortError") {
-          // User cancelled — that's fine, no error needed
+          // User cancelled share sheet — hide overlay, stay on portrait
+          hideResetOverlay();
           return;
         }
+        hideResetOverlay();
         // Share failed for another reason — fall through to download
       }
     }
