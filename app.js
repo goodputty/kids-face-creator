@@ -345,6 +345,7 @@ async function exportPortrait() {
       try {
         await navigator.share({ files: [file], title: "My Portrait" });
         showMessage("✅ Shared! Check AirDrop on your Mac.", "success");
+        showResetOverlay();
         return;
       } catch (err) {
         if (err.name === "AbortError") {
@@ -408,8 +409,35 @@ function showMessage(text, type) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// SERVICE WORKER
+// RESET — restores all state to defaults and rebuilds UI
 // ═══════════════════════════════════════════════════════════════════════════
+const DEFAULT_STATE = {
+  bgColor:   BRAND_COLORS[0],
+  face:      FACE_OPTIONS[0].id,
+  hairColor: HAIR_COLORS[0].id,
+  hair:      HAIR_OPTIONS[0].id,
+  clothes:   CLOTHES_OPTIONS[0].id,
+  accessory: "a1",
+  name:      "Naam",
+  nameColor: BRAND_COLORS[4],
+};
+
+function resetApp() {
+  Object.assign(state, DEFAULT_STATE);
+  nameInput.value = state.name;
+  init();
+  hideResetOverlay();
+}
+
+function showResetOverlay() {
+  document.getElementById("reset-overlay").classList.add("visible");
+}
+
+function hideResetOverlay() {
+  document.getElementById("reset-overlay").classList.remove("visible");
+}
+
+
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("sw.js").catch(() => {});
 }
@@ -573,6 +601,9 @@ function init() {
   });
 
   saveBtn.addEventListener("click", exportPortrait);
+
+  document.getElementById("reset-confirm-btn").addEventListener("click", resetApp);
+  document.getElementById("reset-cancel-btn").addEventListener("click", hideResetOverlay);
 
   render();
 }
