@@ -61,6 +61,16 @@
     }
     #save-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
+    #reset-btn {
+      background: #f0e8e0; color: #3a2208;
+      font-family: inherit; font-weight: 900; font-size: 14px;
+      padding: 11px 22px; border-radius: 40px; border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      display: flex; align-items: center; gap: 8px;
+      transition: opacity 0.2s;
+    }
+
     /* ── Body ── */
     #body {
       flex: 1; display: flex; overflow: hidden; min-height: 0;
@@ -256,6 +266,7 @@
     <div class="brand-title">Maak je eigen portret! 🎨</div>
   </div>
   <button id="save-btn">⬆️ Save &amp; AirDrop</button>
+  <button id="reset-btn">🔄 Nieuw portret</button>
 </div>
 
 <!-- ── Body ── -->

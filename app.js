@@ -104,6 +104,7 @@ const layerName    = document.getElementById("layer-name");
 const nameText     = document.getElementById("name-text");
 const nameInput    = document.getElementById("name-input");
 const saveBtn      = document.getElementById("save-btn");
+const resetBtn     = document.getElementById("reset-btn");
 
 // ═══════════════════════════════════════════════════════════════════════════
 // RENDER — updates the preview whenever state changes
@@ -321,10 +322,9 @@ async function exportPortrait() {
     await drawImage(hair?.src);
     if (state.accessory !== "none") await drawImage(acc?.src);
 
-    // Name text — wait for font to load before drawing
+    // Name text
     if (state.name.trim()) {
       const fontSize = Math.round(PRINT_H * 0.072);
-      try { await document.fonts.load(`900 ${fontSize}px InterMush`); } catch(e) {}
       ctx.font         = `900 ${fontSize}px InterMush, system-ui, sans-serif`;
       ctx.fillStyle    = state.nameColor;
       ctx.textAlign    = "center";
@@ -344,18 +344,14 @@ async function exportPortrait() {
     // Try AirDrop / native share sheet first
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
-        // Show reset overlay immediately — on iOS share resolves on dismiss not delivery
-        showResetOverlay();
         await navigator.share({ files: [file], title: "My Portrait" });
         showMessage("✅ Shared! Check AirDrop on your Mac.", "success");
         return;
       } catch (err) {
         if (err.name === "AbortError") {
-          // User cancelled share sheet — hide overlay, stay on portrait
-          hideResetOverlay();
+          // User cancelled — that's fine, no error needed
           return;
         }
-        hideResetOverlay();
         // Share failed for another reason — fall through to download
       }
     }
@@ -370,7 +366,7 @@ async function exportPortrait() {
     showMessage("📥 Saved to your downloads! (Open Safari to use AirDrop)", "info");
 
   } catch (err) {
-    showMessage("Error: " + (err?.message || err?.name || "unknown"), "error");
+    showMessage("Something went wrong. Please try again.", "error");
     console.error(err);
   } finally {
     saveBtn.disabled = false;
@@ -413,35 +409,8 @@ function showMessage(text, type) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// RESET — restores all state to defaults and rebuilds UI
+// SERVICE WORKER
 // ═══════════════════════════════════════════════════════════════════════════
-const DEFAULT_STATE = {
-  bgColor:   BRAND_COLORS[0],
-  face:      FACE_OPTIONS[0].id,
-  hairColor: HAIR_COLORS[0].id,
-  hair:      HAIR_OPTIONS[0].id,
-  clothes:   CLOTHES_OPTIONS[0].id,
-  accessory: "a1",
-  name:      "Naam",
-  nameColor: BRAND_COLORS[4],
-};
-
-function resetApp() {
-  Object.assign(state, DEFAULT_STATE);
-  nameInput.value = state.name;
-  init();
-  hideResetOverlay();
-}
-
-function showResetOverlay() {
-  document.getElementById("reset-overlay").classList.add("visible");
-}
-
-function hideResetOverlay() {
-  document.getElementById("reset-overlay").classList.remove("visible");
-}
-
-
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("sw.js").catch(() => {});
 }
@@ -562,6 +531,19 @@ function buildFilteredHairGrid() {
   render();
 }
 
+function resetApp() {
+  state.bgColor   = BRAND_COLORS[0];
+  state.face      = FACE_OPTIONS[0].id;
+  state.hairColor = HAIR_COLORS[0].id;
+  state.hair      = HAIR_OPTIONS[0].id;
+  state.clothes   = CLOTHES_OPTIONS[0].id;
+  state.accessory = "a1";
+  state.name      = "Naam";
+  state.nameColor = BRAND_COLORS[4];
+  nameInput.value = "Naam";
+  init();
+}
+
 function init() {
   buildFaceGrid("skin-swatches",       FACE_OPTIONS,
     () => state.face,      v => { state.face      = v; });
@@ -605,9 +587,7 @@ function init() {
   });
 
   saveBtn.addEventListener("click", exportPortrait);
-
-  document.getElementById("reset-confirm-btn").addEventListener("click", resetApp);
-  document.getElementById("reset-cancel-btn").addEventListener("click", hideResetOverlay);
+  resetBtn.addEventListener("click", resetApp);
 
   render();
 }
