@@ -61,7 +61,7 @@
     }
     #save-btn:disabled { opacity: 0.5; cursor: not-allowed; }
     #reset-btn {
-      background: #c2221b; color: white;
+      background: white; color: #3a2208;
       font-family: inherit; font-weight: 900; font-size: 14px;
       padding: 11px 22px; border-radius: 40px; border: none;
       cursor: pointer;
@@ -263,8 +263,10 @@
     <div class="brand-sub">Portraits by Jun-Yi</div>
     <div class="brand-title">Maak je eigen portret! 🎨</div>
   </div>
-  <button id="save-btn">⬆️ Save &amp; AirDrop</button>
-  <button id="reset-btn">🔄 Nieuw portret</button>
+  <div style="display:flex;gap:10px;align-items:center;margin-left:auto;">
+    <button id="reset-btn">🔄 Nieuw portret</button>
+    <button id="save-btn">⬆️ Save &amp; AirDrop</button>
+  </div>
 </div>
 
 <!-- ── Body ── -->
