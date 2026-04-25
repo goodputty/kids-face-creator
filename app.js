@@ -370,7 +370,7 @@ async function exportPortrait() {
     showMessage("📥 Saved to your downloads! (Open Safari to use AirDrop)", "info");
 
   } catch (err) {
-    showMessage("Something went wrong. Please try again.", "error");
+    showMessage("Error: " + (err?.message || err?.name || "unknown"), "error");
     console.error(err);
   } finally {
     saveBtn.disabled = false;
