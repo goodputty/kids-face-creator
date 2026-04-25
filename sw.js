@@ -3,7 +3,7 @@
 // Version: bump this number whenever you update your files, so the
 // cache refreshes on next open. e.g. "portrait-builder-v2"
 // ═══════════════════════════════════════════════════════════════════════════
-const CACHE_NAME = "portrait-builder-v4";
+const CACHE_NAME = "portrait-builder-v5";
 
 // ★ List every file the app needs to work offline.
 // Add each of your PNG image paths here exactly as they appear in app.js.
