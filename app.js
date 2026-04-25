@@ -103,8 +103,8 @@ const layerAcc     = document.getElementById("layer-acc");
 const layerName    = document.getElementById("layer-name");
 const nameText     = document.getElementById("name-text");
 const nameInput    = document.getElementById("name-input");
-const saveBtn      = document.getElementById("save-btn");
-const resetBtn     = document.getElementById("reset-btn");
+const saveBtn  = document.getElementById("save-btn");
+const resetBtn = document.getElementById("reset-btn");
 
 // ═══════════════════════════════════════════════════════════════════════════
 // RENDER — updates the preview whenever state changes
