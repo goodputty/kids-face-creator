@@ -322,15 +322,21 @@ async function exportPortrait() {
     await drawImage(hair?.src);
     if (state.accessory !== "none") await drawImage(acc?.src);
 
-    // Name text
+    // Name text — match SVG preview sizing logic using measureText
     if (state.name.trim()) {
-      const fontSize = Math.round(PRINT_H * 0.072);
-      ctx.font         = `900 ${fontSize}px InterMush, system-ui, sans-serif`;
-      ctx.fillStyle    = state.nameColor;
+      const nameStr  = state.name.toUpperCase();
+      const maxWidth = PRINT_W * 0.82;
+      let fontSize   = Math.round(PRINT_H * 0.16);
       ctx.textAlign    = "center";
       ctx.textBaseline = "bottom";
+      ctx.fillStyle    = state.nameColor;
+      // Shrink font until text fits within 82% of canvas width
+      do {
+        ctx.font = `900 ${fontSize}px InterMush, system-ui, sans-serif`;
+        fontSize -= 1;
+      } while (ctx.measureText(nameStr).width > maxWidth && fontSize > 10);
       ctx.fillText(
-        state.name.toUpperCase(),
+        nameStr,
         PRINT_W / 2,
         PRINT_H - Math.round(PRINT_H * 0.04)
       );
